@@ -67,16 +67,16 @@ namespace enigmaMachine
             if (pinOffset >= maxPins)
                 pinOffset = 0;
         }
-
+        
         /**
          * Given a pin on the right side, return where it's "wired" up to on
          * the left side.
          */
         public int GetPin_RtoL(int Pin)
         {
-            int leftPin = Pin + pinOffset;
-            leftPin = leftPin % maxPins;
-            return mapping[leftPin];
+            Pin = Pin + pinOffset;
+            Pin = Pin % maxPins;
+            return mapping[Pin];
         }
 
         /**
@@ -85,9 +85,9 @@ namespace enigmaMachine
          */
         public int GetPin_LtoR(int Pin)
         {
-            int rightPin = mapping.IndexOf(Pin) - pinOffset + maxPins;
-            rightPin = rightPin % maxPins;
-            return rightPin;
+            Pin = mapping.IndexOf(Pin) - pinOffset + maxPins;
+            Pin = Pin % maxPins;
+            return Pin;
         }
 
         /**
