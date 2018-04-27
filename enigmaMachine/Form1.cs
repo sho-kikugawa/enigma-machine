@@ -14,7 +14,7 @@ namespace enigmaMachine
     {
         const int PIN_COUNT = 26;
         const int ROTOR_COUNT = 4;
-        private EnigmaMachine machine;
+        private RotorHousing machine;
         private List<String> charMapping;
         private List<NumericUpDown> rotorPositions;
         private List<Label> lampLabels;
@@ -40,8 +40,9 @@ namespace enigmaMachine
             rngSeedUpDown.Maximum = int.MaxValue;
             rngSeedUpDown.Value = new Random().Next();
 
-            machine = new EnigmaMachine(PIN_COUNT, ROTOR_COUNT, (int)rngSeedUpDown.Value, charMapping);
-            plugBoard = new PlugBoard((int)rngSeedUpDown.Value, true);
+            machine = new RotorHousing(PIN_COUNT, ROTOR_COUNT, (int)rngSeedUpDown.Value, charMapping);
+            plugBoard = new PlugBoard((int)rngSeedUpDown.Value, charMapping);
+            plugBoard.ShuffleWiring();
         }
 
         /* GUI elements with multiple versions of the same thing are grouped for dynamic handling. 
@@ -225,21 +226,22 @@ namespace enigmaMachine
 
         private void rngSeedUpDown_ValueChanged(object sender, EventArgs e)
         {
-            machine = new EnigmaMachine(PIN_COUNT, ROTOR_COUNT, (int)rngSeedUpDown.Value, charMapping);
+            machine = new RotorHousing(PIN_COUNT, ROTOR_COUNT, (int)rngSeedUpDown.Value, charMapping);
             foreach (NumericUpDown rotor in rotorPositions)
                 rotor.BackColor = SystemColors.Window;
         }
 
         private void randomizePlugBoardButton_Click(object sender, EventArgs e)
         {
-            plugBoard = new PlugBoard((int)rngSeedUpDown.Value, true);
+            plugBoard = new PlugBoard((int)rngSeedUpDown.Value, charMapping);
+            plugBoard.ShuffleWiring();
             updatePlugBoardGui();
             resetLights();
         }
 
         private void resetPlugBoardButton_Click(object sender, EventArgs e)
         {
-            plugBoard = new PlugBoard((int)rngSeedUpDown.Value); ;
+            plugBoard = new PlugBoard((int)rngSeedUpDown.Value, charMapping); ;
             updatePlugBoardGui();
             resetLights();
         }

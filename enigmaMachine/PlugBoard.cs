@@ -1,46 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 
 namespace enigmaMachine
 {
     /**
-     * Implements the plug board feature of the Enigma machine. Since this
-     * affects the input and output, this has to be separated from the
-     * class that implements the logic for handling rotors.
-     * 
-     * At the moment this only supports 26 characters: A-Z.
+     * Implements the plug board feature of the Enigma machine. This affects 
+     * the input and outputs from the rotor housing.
      */
     class PlugBoard
     {
-        const int PIN_COUNT = 26;
         private Dictionary<string, string> mapping;
         private Random rng;
 
-        public PlugBoard(int Seed, bool Shuffle=false)
+        /**
+         * Constructor for the plug board. It needs:
+         * Seed {int} - Seed for the random number generator.
+         * CharList {List<string>} - A List containing the "plugs" to use in
+         *      the plug board.
+         */
+        public PlugBoard(int Seed, List<string> CharList)
         {
-            
             mapping = new Dictionary<string, string>();
-            for (int i = 0; i < PIN_COUNT; i++)
-            {
-                string letter = ((char)(0x41 + i)).ToString();
-                mapping.Add(letter, letter);
-            }
             rng = new Random(Seed);
 
-            if (Shuffle)
-                ShuffleWiring();
+            foreach (string entry in CharList)
+                mapping.Add(entry, entry);
         }
 
         /**
-         * Checks to see if the input is A-Z (calls ToUpper first), then
-         * returns either the remapped letter or let the input pass 
-         * through
+         * Returns a rewired letter. Checks to see if the input exists in the
+         * dictionary map first as a key. If it does, return the mapped output
+         * otherwise return the input.
          */
         public string GetRewiredLetter(string Input)
         {
             Input = Input.ToUpper();
-            if(Regex.Matches(Input, @"[A-Z]").Count > 0)
+            if (mapping.ContainsKey(Input))
                 return mapping[Input];
             return Input;
         }
@@ -62,44 +57,41 @@ namespace enigmaMachine
         }
 
         /**
-         * Shuffles the wiring around.
+         * Shuffles the wiring around. 
          */
         public void ShuffleWiring()
         {
-            if (rng == null)
-                throw new NullReferenceException("Plugboard RNG was not setup");
-
             int entries = mapping.Count;
             Dictionary<string, string>.KeyCollection keys = mapping.Keys;
 
             for(int i = 0; i < entries; i++)
             {
-                int entry = rng.Next(entries + 1);
+                int randEntry = rng.Next(entries + 1);
                 int counter = 0;
-                string firstLetter = IntToLetter(i % entries);
+                string firstLetter = "";
                 string secondLetter = "";
 
-                entry = (rng.Next() % entries);
+                foreach (string randomKey in keys)
+                {
+                    firstLetter = randomKey;
+                    counter++;
+                    if (counter == randEntry)
+                        break;
+                }
+
+                randEntry = (rng.Next() % entries);
                 counter = 0;
+
                 foreach (string randomKey in keys)
                 {
                     secondLetter = randomKey;
                     counter++;
-                    if (counter == entry)
+                    if (counter == randEntry)
                         break;
                 }
 
                 ChangeWiring(firstLetter, secondLetter);
             }
-        }
-
-        /**
-         * Turns an integer into a single letter string. The code starts from
-         * A = 0 to Z = 25.
-         */
-        private string IntToLetter(int LetterCode)
-        {
-            return ((char)(0x41 + LetterCode)).ToString();
         }
     }
 }

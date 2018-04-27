@@ -23,7 +23,7 @@ namespace enigmaMachine
         }
 
         /**
-         * Create a rotor with a randomized input to output
+         * Create a rotor with a randomized wiring
          */
         public Rotor(int PinCount, int Seed)
         {
@@ -69,21 +69,25 @@ namespace enigmaMachine
         }
 
         /**
-         * Given a pin on the input side, return where it's "wired" up to on
-         * the output side.
+         * Given a pin on the right side, return where it's "wired" up to on
+         * the left side.
          */
-        public int GetInToOut(int Pin)
+        public int GetPin_RtoL(int Pin)
         {
-            return getOffsetList()[Pin];
+            int leftPin = Pin + pinOffset;
+            leftPin = leftPin % maxPins;
+            return mapping[leftPin];
         }
 
         /**
-         * Given a pin on the output side, return where it's "wired" up to on
-         * the input side.
+         * Given a pin on the left side, return where it's "wired" up to on
+         * the right side.
          */
-        public int GetOutToIn(int Pin)
+        public int GetPin_LtoR(int Pin)
         {
-            return getOffsetList().IndexOf(Pin);
+            int rightPin = mapping.IndexOf(Pin) - pinOffset + maxPins;
+            rightPin = rightPin % maxPins;
+            return rightPin;
         }
 
         /**
@@ -100,21 +104,6 @@ namespace enigmaMachine
                 list[k] = list[n];
                 list[n] = value;
             }
-        }
-
-        /**
-         * Returns a temporary list that is the original but offset. 
-         */
-        private List<int> getOffsetList() {
-            List<int> tempList = new List<int>();
-
-            for(int i = 0; i < mapping.Count; i++)
-            {
-                int position = (i + pinOffset) % maxPins;
-                tempList.Add(mapping[position]);
-            }
-
-            return tempList;
         }
     }
 }

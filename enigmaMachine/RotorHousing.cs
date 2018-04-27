@@ -4,12 +4,16 @@ using System.Text;
 
 namespace enigmaMachine
 {
-    class EnigmaMachine
+    class RotorHousing
     {
         private Rotor[] rotors;
         private List<String> charMapping;
 
-        public EnigmaMachine(int PinCount, int RotorCount, int Seed, List<String> Mapping)
+        /**
+         * Creates the "rotor housing" object. It will create rotor count + 1, as
+         * the last rotor needs to be a reflector.
+         */
+        public RotorHousing(int PinCount, int RotorCount, int Seed, List<String> Mapping)
         {
             int i;
             Random rand = new Random(Seed);
@@ -20,6 +24,7 @@ namespace enigmaMachine
             {
                 rotors[i] = new Rotor(PinCount, rand.Next());
             }
+
             rotors[i] = new Rotor(PinCount);
         }
 
@@ -29,23 +34,21 @@ namespace enigmaMachine
         public string Scramble(string InputText)
         {
             string output = "";
-            byte[] inputBytes;
 
-            InputText = InputText.ToUpper();
-            inputBytes = Encoding.ASCII.GetBytes(InputText);
-
-            for (int i = 0; i < inputBytes.Length; i++)
+            for (int i = 0; i < InputText.Length; i++)
             {
-                if (0x41 <= (int)inputBytes[i] && (int)inputBytes[i] <= 0x5A)
+                string letter = InputText[i].ToString();
+                int inputPin = charMapping.IndexOf(letter);
+
+                if (inputPin > -1)
                 {
-                    int inputPin = (int)inputBytes[i] - 0x41;
                     int outPin = getRotorOutput(inputPin, 0);
                     advanceRotor(0);
                     output += charMapping[outPin];
                 }
                 else
                 {
-                    output += (char)inputBytes[i];
+                    output += letter;
                 }
             }
 
@@ -77,12 +80,12 @@ namespace enigmaMachine
             int outputPin = 0;
             if(RotorNum < rotors.Length - 1)
             {
-                outputPin = getRotorOutput(rotors[RotorNum].GetInToOut(InputPin), (RotorNum + 1));
-                outputPin = rotors[RotorNum].GetOutToIn(outputPin);
+                outputPin = getRotorOutput(rotors[RotorNum].GetPin_RtoL(InputPin), (RotorNum + 1));
+                outputPin = rotors[RotorNum].GetPin_LtoR(outputPin);
             }
             else
             {
-                outputPin = rotors[RotorNum].GetOutToIn(InputPin);
+                outputPin = rotors[RotorNum].GetPin_LtoR(InputPin);
             }
             return outputPin;
         }
