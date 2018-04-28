@@ -31,7 +31,7 @@ namespace enigmaMachine
         /**
          * Scrambles text input using the rotors.
          */
-        public string Scramble(string InputText)
+        public string ScrambleText(string InputText)
         {
             string output = "";
 

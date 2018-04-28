@@ -47,7 +47,7 @@
             this.fullMethodTabPage = new System.Windows.Forms.TabPage();
             this.plugBoardGroupBox = new System.Windows.Forms.GroupBox();
             this.resetPlugBoardButton = new System.Windows.Forms.Button();
-            this.randomizePlugBoardButton = new System.Windows.Forms.Button();
+            this.shufflePlugBoardButton = new System.Windows.Forms.Button();
             this.ZPlugBoardLabel = new System.Windows.Forms.Label();
             this.ZPlugBoardComboBox = new System.Windows.Forms.ComboBox();
             this.YPlugBoardLabel = new System.Windows.Forms.Label();
@@ -152,6 +152,8 @@
             this.ELightLabel = new System.Windows.Forms.Label();
             this.WLightLabel = new System.Windows.Forms.Label();
             this.QLightLabel = new System.Windows.Forms.Label();
+            this.settingsLabel = new System.Windows.Forms.Label();
+            this.clearPlugBoardButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.rotor1PositionUpDown)).BeginInit();
             this.rotorSettingsGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.rngSeedUpDown)).BeginInit();
@@ -190,7 +192,7 @@
             // rngSeedLabel
             // 
             this.rngSeedLabel.AutoSize = true;
-            this.rngSeedLabel.Location = new System.Drawing.Point(8, 61);
+            this.rngSeedLabel.Location = new System.Drawing.Point(10, 47);
             this.rngSeedLabel.Name = "rngSeedLabel";
             this.rngSeedLabel.Size = new System.Drawing.Size(35, 13);
             this.rngSeedLabel.TabIndex = 7;
@@ -198,7 +200,7 @@
             // 
             // rngSeedUpDown
             // 
-            this.rngSeedUpDown.Location = new System.Drawing.Point(47, 59);
+            this.rngSeedUpDown.Location = new System.Drawing.Point(47, 45);
             this.rngSeedUpDown.Name = "rngSeedUpDown";
             this.rngSeedUpDown.Size = new System.Drawing.Size(120, 20);
             this.rngSeedUpDown.TabIndex = 6;
@@ -302,6 +304,7 @@
             // 
             // simpleInputTabPage
             // 
+            this.simpleInputTabPage.Controls.Add(this.settingsLabel);
             this.simpleInputTabPage.Controls.Add(this.plugBoardCheckbox);
             this.simpleInputTabPage.Controls.Add(this.inputTextBox);
             this.simpleInputTabPage.Controls.Add(this.outputTextBox);
@@ -381,8 +384,9 @@
             // 
             // plugBoardGroupBox
             // 
+            this.plugBoardGroupBox.Controls.Add(this.clearPlugBoardButton);
             this.plugBoardGroupBox.Controls.Add(this.resetPlugBoardButton);
-            this.plugBoardGroupBox.Controls.Add(this.randomizePlugBoardButton);
+            this.plugBoardGroupBox.Controls.Add(this.shufflePlugBoardButton);
             this.plugBoardGroupBox.Controls.Add(this.ZPlugBoardLabel);
             this.plugBoardGroupBox.Controls.Add(this.ZPlugBoardComboBox);
             this.plugBoardGroupBox.Controls.Add(this.YPlugBoardLabel);
@@ -444,7 +448,7 @@
             // 
             // resetPlugBoardButton
             // 
-            this.resetPlugBoardButton.Location = new System.Drawing.Point(89, 175);
+            this.resetPlugBoardButton.Location = new System.Drawing.Point(316, 173);
             this.resetPlugBoardButton.Name = "resetPlugBoardButton";
             this.resetPlugBoardButton.Size = new System.Drawing.Size(75, 23);
             this.resetPlugBoardButton.TabIndex = 106;
@@ -452,22 +456,22 @@
             this.resetPlugBoardButton.UseVisualStyleBackColor = true;
             this.resetPlugBoardButton.Click += new System.EventHandler(this.resetPlugBoardButton_Click);
             // 
-            // randomizePlugBoardButton
+            // shufflePlugBoardButton
             // 
-            this.randomizePlugBoardButton.Location = new System.Drawing.Point(11, 175);
-            this.randomizePlugBoardButton.Name = "randomizePlugBoardButton";
-            this.randomizePlugBoardButton.Size = new System.Drawing.Size(75, 23);
-            this.randomizePlugBoardButton.TabIndex = 105;
-            this.randomizePlugBoardButton.Text = "Randomize";
-            this.randomizePlugBoardButton.UseVisualStyleBackColor = true;
-            this.randomizePlugBoardButton.Click += new System.EventHandler(this.randomizePlugBoardButton_Click);
+            this.shufflePlugBoardButton.Location = new System.Drawing.Point(235, 173);
+            this.shufflePlugBoardButton.Name = "shufflePlugBoardButton";
+            this.shufflePlugBoardButton.Size = new System.Drawing.Size(75, 23);
+            this.shufflePlugBoardButton.TabIndex = 105;
+            this.shufflePlugBoardButton.Text = "Shuffle";
+            this.shufflePlugBoardButton.UseVisualStyleBackColor = true;
+            this.shufflePlugBoardButton.Click += new System.EventHandler(this.shufflePlugBoardButton_Click);
             // 
             // ZPlugBoardLabel
             // 
             this.ZPlugBoardLabel.AutoSize = true;
             this.ZPlugBoardLabel.BackColor = System.Drawing.SystemColors.Window;
             this.ZPlugBoardLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ZPlugBoardLabel.Location = new System.Drawing.Point(319, 172);
+            this.ZPlugBoardLabel.Location = new System.Drawing.Point(84, 172);
             this.ZPlugBoardLabel.MaximumSize = new System.Drawing.Size(24, 24);
             this.ZPlugBoardLabel.MinimumSize = new System.Drawing.Size(24, 24);
             this.ZPlugBoardLabel.Name = "ZPlugBoardLabel";
@@ -506,7 +510,7 @@
             "X",
             "Y",
             "Z"});
-            this.ZPlugBoardComboBox.Location = new System.Drawing.Point(349, 175);
+            this.ZPlugBoardComboBox.Location = new System.Drawing.Point(114, 175);
             this.ZPlugBoardComboBox.Name = "ZPlugBoardComboBox";
             this.ZPlugBoardComboBox.Size = new System.Drawing.Size(42, 21);
             this.ZPlugBoardComboBox.TabIndex = 103;
@@ -516,7 +520,7 @@
             this.YPlugBoardLabel.AutoSize = true;
             this.YPlugBoardLabel.BackColor = System.Drawing.SystemColors.Window;
             this.YPlugBoardLabel.Font = new System.Drawing.Font("Segoe UI Semibold", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.YPlugBoardLabel.Location = new System.Drawing.Point(241, 172);
+            this.YPlugBoardLabel.Location = new System.Drawing.Point(6, 172);
             this.YPlugBoardLabel.MaximumSize = new System.Drawing.Size(24, 24);
             this.YPlugBoardLabel.MinimumSize = new System.Drawing.Size(24, 24);
             this.YPlugBoardLabel.Name = "YPlugBoardLabel";
@@ -555,7 +559,7 @@
             "X",
             "Y",
             "Z"});
-            this.YPlugBoardComboBox.Location = new System.Drawing.Point(271, 175);
+            this.YPlugBoardComboBox.Location = new System.Drawing.Point(36, 175);
             this.YPlugBoardComboBox.Name = "YPlugBoardComboBox";
             this.YPlugBoardComboBox.Size = new System.Drawing.Size(42, 21);
             this.YPlugBoardComboBox.TabIndex = 101;
@@ -2412,6 +2416,25 @@
             this.QLightLabel.Text = "Q";
             this.QLightLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // settingsLabel
+            // 
+            this.settingsLabel.AutoSize = true;
+            this.settingsLabel.Location = new System.Drawing.Point(6, 132);
+            this.settingsLabel.Name = "settingsLabel";
+            this.settingsLabel.Size = new System.Drawing.Size(74, 13);
+            this.settingsLabel.TabIndex = 8;
+            this.settingsLabel.Text = "Settings used:";
+            // 
+            // clearPlugBoardButton
+            // 
+            this.clearPlugBoardButton.Location = new System.Drawing.Point(394, 173);
+            this.clearPlugBoardButton.Name = "clearPlugBoardButton";
+            this.clearPlugBoardButton.Size = new System.Drawing.Size(75, 23);
+            this.clearPlugBoardButton.TabIndex = 107;
+            this.clearPlugBoardButton.Text = "Clear";
+            this.clearPlugBoardButton.UseVisualStyleBackColor = true;
+            this.clearPlugBoardButton.Click += new System.EventHandler(this.clearPlugBoardButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2562,8 +2585,10 @@
         private System.Windows.Forms.Label OPlugBoardLabel;
         private System.Windows.Forms.ComboBox EPlugBoardComboBox;
         private System.Windows.Forms.ComboBox JPlugBoardComboBox;
-        private System.Windows.Forms.Button randomizePlugBoardButton;
+        private System.Windows.Forms.Button shufflePlugBoardButton;
         private System.Windows.Forms.Button resetPlugBoardButton;
+        private System.Windows.Forms.Label settingsLabel;
+        private System.Windows.Forms.Button clearPlugBoardButton;
     }
 }
 

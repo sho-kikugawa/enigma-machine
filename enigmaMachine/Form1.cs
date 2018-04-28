@@ -59,7 +59,7 @@ namespace enigmaMachine
             foreach(NumericUpDown rotor in rotorPositions)
             {
                 rotor.Maximum = PIN_COUNT;
-                rotor.Leave += Rotor_Leave;
+                rotor.ValueChanged += Rotor_ValueChanged;
             }
                 
         }
@@ -169,16 +169,20 @@ namespace enigmaMachine
             }
         }
  
-        private void Rotor_Leave(object sender, EventArgs e)
+        private void Rotor_ValueChanged(object sender, EventArgs e)
         {
-            int rotorIndex = rotorPositions.IndexOf((NumericUpDown)sender);
-            rotorPositions[rotorIndex].BackColor = Color.Salmon;
+            NumericUpDown rotor = (NumericUpDown)sender;
+            int rotorIndex = rotorPositions.IndexOf(rotor);
+            if (machine.GetRotorPosition(rotorIndex) != (int)rotor.Value)
+                rotor.BackColor = Color.Salmon;
+            else
+                rotor.BackColor = SystemColors.Window;
+            
         }
 
         private void KeyButton_Click(object sender, EventArgs e)
         {
-            int keyIndex = keyboardButtons.IndexOf((Button)sender);
-            Button keyButton = keyboardButtons[keyIndex];
+            Button keyButton = ((Button)sender);
             string keyLetter = keyButton.Name.Substring(0, 1);
             keyLetter = plugBoard.GetRewiredLetter(keyLetter);
             encodeKeyPress(keyLetter);
@@ -199,6 +203,12 @@ namespace enigmaMachine
         {
             string inputText = inputTextBox.Text.ToUpper();
             string outputText = "";
+
+            settingsLabel.Text = string.Format("Settings: {0}:{1}:{2}:{3}-{4}-{5}",
+                rotor4PositionUpDown.Value, rotor3PositionUpDown.Value,
+                rotor2PositionUpDown.Value, rotor1PositionUpDown.Value,
+                rngSeedUpDown.Value, (plugBoardCheckbox.Checked ? 1 : 0));
+
             if (plugBoardCheckbox.Checked)
             {
                 inputText = runPlugBoard(inputText);
@@ -231,19 +241,23 @@ namespace enigmaMachine
                 rotor.BackColor = SystemColors.Window;
         }
 
-        private void randomizePlugBoardButton_Click(object sender, EventArgs e)
+        private void shufflePlugBoardButton_Click(object sender, EventArgs e)
         {
-            plugBoard = new PlugBoard((int)rngSeedUpDown.Value, charMapping);
             plugBoard.ShuffleWiring();
             updatePlugBoardGui();
-            resetLights();
         }
 
         private void resetPlugBoardButton_Click(object sender, EventArgs e)
         {
+            plugBoard = new PlugBoard((int)rngSeedUpDown.Value, charMapping);
+            plugBoard.ShuffleWiring();
+            updatePlugBoardGui();
+        }
+
+        private void clearPlugBoardButton_Click(object sender, EventArgs e)
+        {
             plugBoard = new PlugBoard((int)rngSeedUpDown.Value, charMapping); ;
             updatePlugBoardGui();
-            resetLights();
         }
 
         private void inputMethodTabControl_SelectedIndexChanged(object sender, EventArgs e)
@@ -265,7 +279,7 @@ namespace enigmaMachine
 
         private string scrambleInput(string Input)
         {
-            string output = machine.Scramble(Input);
+            string output = machine.ScrambleText(Input);
             for (int rotor = 0; rotor < rotorPositions.Count; rotor++)
                 rotorPositions[rotor].Value = machine.GetRotorPosition(rotor);
             return output;
@@ -300,6 +314,7 @@ namespace enigmaMachine
                 string letter = ((char)(i + 0x41)).ToString();
                 plugBoardPins[i].SelectedIndex = LetterToInt(plugBoard.GetRewiredLetter(letter));
             }
+            resetLights();
         }
 
         private void resetLights()

@@ -85,7 +85,7 @@ namespace enigmaMachine
          */
         public int GetPin_LtoR(int Pin)
         {
-            Pin = mapping.IndexOf(Pin) - pinOffset + maxPins;
+            Pin = mapping.IndexOf(Pin) + (maxPins - pinOffset);
             Pin = Pin % maxPins;
             return Pin;
         }
