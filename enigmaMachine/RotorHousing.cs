@@ -100,8 +100,7 @@ namespace enigmaMachine
                 return;
 
             rotors[RotorNum].AdvanceRotor();
-            if (rotors[RotorNum].GetPosition() == 0 && 
-                RotorNum < (rotors.Length-1))
+            if (rotors[RotorNum].GetPosition() == 0 && RotorNum < (rotors.Length-1))
             {
                 RotorNum++;
                 advanceRotor(RotorNum);

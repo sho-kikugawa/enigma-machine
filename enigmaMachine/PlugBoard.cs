@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace enigmaMachine
@@ -61,35 +62,12 @@ namespace enigmaMachine
          */
         public void ShuffleWiring()
         {
-            int entries = mapping.Count;
-            Dictionary<string, string>.KeyCollection keys = mapping.Keys;
+            string[] keys = mapping.Keys.ToArray();
 
-            for(int i = 0; i < entries; i++)
+            for (int i = 0; i < keys.Length; i++)
             {
-                int randEntry = rng.Next(entries + 1);
-                int counter = 0;
-                string firstLetter = "";
-                string secondLetter = "";
-
-                foreach (string randomKey in keys)
-                {
-                    firstLetter = randomKey;
-                    counter++;
-                    if (counter == randEntry)
-                        break;
-                }
-
-                randEntry = (rng.Next() % entries);
-                counter = 0;
-
-                foreach (string randomKey in keys)
-                {
-                    secondLetter = randomKey;
-                    counter++;
-                    if (counter == randEntry)
-                        break;
-                }
-
+                string firstLetter = keys[i];
+                string secondLetter = keys[rng.Next(keys.Length)];
                 ChangeWiring(firstLetter, secondLetter);
             }
         }

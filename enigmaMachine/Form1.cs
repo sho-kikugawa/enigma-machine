@@ -14,6 +14,9 @@ namespace enigmaMachine
     {
         const int PIN_COUNT = 26;
         const int ROTOR_COUNT = 4;
+        static string[] QWERTY_LINE = {"QWERTYUIO", "ASDFGHJK", "ZXCVBNMLP"};
+
+        private Label lastLamp;
         private RotorHousing machine;
         private List<String> charMapping;
         private List<NumericUpDown> rotorPositions;
@@ -21,7 +24,6 @@ namespace enigmaMachine
         private List<Button> keyboardButtons;
         private List<ComboBox> plugBoardPins;
         private PlugBoard plugBoard;
-
         public Form1()
         {
             InitializeComponent();
@@ -33,7 +35,7 @@ namespace enigmaMachine
             }
 
             setupRotors();
-            setupLampLabels();
+            setuplampLabels();
             setupKeyboardButtons();
             setupPlugBoard();
 
@@ -64,108 +66,102 @@ namespace enigmaMachine
                 
         }
 
-        private void setupLampLabels()
+        private void setuplampLabels()
         {
+            int row = 0;
             lampLabels = new List<Label>();
-            lampLabels.Add(ALightLabel);
-            lampLabels.Add(BLightLabel);
-            lampLabels.Add(CLightLabel);
-            lampLabels.Add(DLightLabel);
-            lampLabels.Add(ELightLabel);
-            lampLabels.Add(FLightLabel);
-            lampLabels.Add(GLightLabel);
-            lampLabels.Add(HLightLabel);
-            lampLabels.Add(ILightLabel);
-            lampLabels.Add(JLightLabel);
-            lampLabels.Add(KLightLabel);
-            lampLabels.Add(LLightLabel);
-            lampLabels.Add(MLightLabel);
-            lampLabels.Add(NLightLabel);
-            lampLabels.Add(OLightLabel);
-            lampLabels.Add(PLightLabel);
-            lampLabels.Add(QLightLabel);
-            lampLabels.Add(RLightLabel);
-            lampLabels.Add(SLightLabel);
-            lampLabels.Add(TLightLabel);
-            lampLabels.Add(ULightLabel);
-            lampLabels.Add(VLightLabel);
-            lampLabels.Add(WLightLabel);
-            lampLabels.Add(XLightLabel);
-            lampLabels.Add(YLightLabel);
-            lampLabels.Add(ZLightLabel);
+
+            setupLamp(QLightLabel, row++);
+            setupLamp(ALightLabel, row++);
+            setupLamp(ZLightLabel, row++);
+
+            lastLamp = QLightLabel;
+            lampLabels.Sort((x, y) => String.Compare(x.Text, y.Text));
+        }
+
+        private void setupLamp(Label BaseLabel, int Row)
+        {
+            const int LABEL_SPACING = 36;
+            lampLabels.Add(BaseLabel);
+            for (int Col = 1; Col < QWERTY_LINE[Row].Length; Col++)
+            {
+                Label lampLabel = new Label();
+                lampLabel.Font = BaseLabel.Font;
+                lampLabel.TextAlign = ContentAlignment.MiddleCenter;
+                lampLabel.BackColor = Color.Gray;
+                lampLabel.Parent = fullMethodTabPage;
+                lampLabel.Location = new Point(BaseLabel.Location.X + (Col * LABEL_SPACING), BaseLabel.Location.Y);
+                lampLabel.Size = new Size(30, 30);
+                lampLabel.Text = QWERTY_LINE[Row][Col].ToString();
+                lampLabel.Name = string.Format("{0}LightLabel", QWERTY_LINE[Row][Col]);
+                lampLabels.Add(lampLabel);
+            }
         }
 
         private void setupKeyboardButtons()
         {
+            int row = 0;
             keyboardButtons = new List<Button>();
 
-            keyboardButtons.Add(AKeyButton);
-            keyboardButtons.Add(BKeyButton);
-            keyboardButtons.Add(CKeyButton);
-            keyboardButtons.Add(DKeyButton);
-            keyboardButtons.Add(EKeyButton);
-            keyboardButtons.Add(FKeyButton);
-            keyboardButtons.Add(GKeyButton);
-            keyboardButtons.Add(HKeyButton);
-            keyboardButtons.Add(IKeyButton);
-            keyboardButtons.Add(JKeyButton);
-            keyboardButtons.Add(KKeyButton);
-            keyboardButtons.Add(LKeyButton);
-            keyboardButtons.Add(MKeyButton);
-            keyboardButtons.Add(NKeyButton);
-            keyboardButtons.Add(OKeyButton);
-            keyboardButtons.Add(PKeyButton);
-            keyboardButtons.Add(QKeyButton);
-            keyboardButtons.Add(RKeyButton);
-            keyboardButtons.Add(SKeyButton);
-            keyboardButtons.Add(TKeyButton);
-            keyboardButtons.Add(UKeyButton);
-            keyboardButtons.Add(VKeyButton);
-            keyboardButtons.Add(WKeyButton);
-            keyboardButtons.Add(XKeyButton);
-            keyboardButtons.Add(YKeyButton);
-            keyboardButtons.Add(ZKeyButton);
+            setupKey(QKeyButton, row++);
+            setupKey(AKeyButton, row++);
+            setupKey(ZKeyButton, row++);
+        }
 
-            foreach(Button keyButton in keyboardButtons)
+        private void setupKey(Button BaseButton, int Row)
+        {
+            const int BUTTON_SPACING = 36;
+            BaseButton.Click += KeyButton_Click;
+            keyboardButtons.Add(BaseButton);
+
+            for (int Col = 1; Col < QWERTY_LINE[Row].Length; Col++)
             {
+                Button keyButton = new Button();
+                keyButton.Font = BaseButton.Font;
+                keyButton.TextAlign = ContentAlignment.MiddleCenter;
+                keyButton.Parent = fullMethodTabPage;
+                keyButton.Location = new Point(BaseButton.Location.X + (Col * BUTTON_SPACING), BaseButton.Location.Y);
+                keyButton.Size = new Size(30, 30);
+                keyButton.Text = QWERTY_LINE[Row][Col].ToString();
+                keyButton.Name = string.Format("{0}KeyButton", QWERTY_LINE[Row][Col]);
                 keyButton.Click += KeyButton_Click;
+                keyboardButtons.Add(keyButton);
             }
         }
 
         private void setupPlugBoard()
         {
+            const int LABEL_SPACING_X = 78;
+            const int LABEL_SPACING_Y = 40;
             plugBoardPins = new List<ComboBox>();
-            plugBoardPins.Add(APlugBoardComboBox);
-            plugBoardPins.Add(BPlugBoardComboBox);
-            plugBoardPins.Add(CPlugBoardComboBox);
-            plugBoardPins.Add(DPlugBoardComboBox);
-            plugBoardPins.Add(EPlugBoardComboBox);
-            plugBoardPins.Add(FPlugBoardComboBox);
-            plugBoardPins.Add(GPlugBoardComboBox);
-            plugBoardPins.Add(HPlugBoardComboBox);
-            plugBoardPins.Add(IPlugBoardComboBox);
-            plugBoardPins.Add(JPlugBoardComboBox);
-            plugBoardPins.Add(KPlugBoardComboBox);
-            plugBoardPins.Add(LPlugBoardComboBox);
-            plugBoardPins.Add(MPlugBoardComboBox);
-            plugBoardPins.Add(NPlugBoardComboBox);
-            plugBoardPins.Add(OPlugBoardComboBox);
-            plugBoardPins.Add(PPlugBoardComboBox);
-            plugBoardPins.Add(QPlugBoardComboBox);
-            plugBoardPins.Add(RPlugBoardComboBox);
-            plugBoardPins.Add(SPlugBoardComboBox);
-            plugBoardPins.Add(TPlugBoardComboBox);
-            plugBoardPins.Add(UPlugBoardComboBox);
-            plugBoardPins.Add(VPlugBoardComboBox);
-            plugBoardPins.Add(WPlugBoardComboBox);
-            plugBoardPins.Add(XPlugBoardComboBox);
-            plugBoardPins.Add(YPlugBoardComboBox);
-            plugBoardPins.Add(ZPlugBoardComboBox);
 
-            for (int i = 0; i < plugBoardPins.Count; i++)
+            APlugBoardComboBox.SelectedIndex = 0;
+            APlugBoardComboBox.SelectedValueChanged += PlugBoardPin_SelectedValueChanged;
+            plugBoardPins.Add(APlugBoardComboBox);
+            for (char letter = 'B'; letter <= 'Z'; letter++)
             {
-                plugBoardPins[i].SelectedIndex = i;
-                plugBoardPins[i].SelectedValueChanged += PlugBoardPin_SelectedValueChanged;
+                int col = (letter - 'A') % 6;
+                int row = (letter - 'A') / 6;
+                Label plugBoardLabel = new Label();
+                plugBoardLabel.Font = APlugBoardLabel.Font;
+                plugBoardLabel.TextAlign = ContentAlignment.MiddleCenter;
+                plugBoardLabel.Parent = plugBoardGroupBox;
+                plugBoardLabel.Location = new Point(APlugBoardLabel.Location.X + (col * LABEL_SPACING_X), APlugBoardLabel.Location.Y + (row * LABEL_SPACING_Y));
+                plugBoardLabel.Size = new Size(24, 24);
+                plugBoardLabel.Text = letter.ToString();
+                plugBoardLabel.Name = string.Format("{0}PlugBoardLabel", letter);
+
+                ComboBox plugBoardCombo = new ComboBox();
+                plugBoardCombo.Parent = plugBoardGroupBox;
+                plugBoardCombo.DropDownHeight = 106;
+                plugBoardCombo.DropDownWidth = 42;
+                plugBoardCombo.Size = new Size(42, 20);
+                plugBoardCombo.Location = new Point(APlugBoardComboBox.Location.X + (col * LABEL_SPACING_X), APlugBoardComboBox.Location.Y + (row * LABEL_SPACING_Y));
+                plugBoardCombo.Name = string.Format("{0}PlugBoardComboBox", letter);
+                plugBoardCombo.Items.AddRange(APlugBoardComboBox.Items.Cast<object>().ToArray());
+                plugBoardCombo.SelectedIndex = (letter - 'A');
+                plugBoardCombo.SelectedValueChanged += PlugBoardPin_SelectedValueChanged;
+                plugBoardPins.Add(plugBoardCombo);
             }
         }
  
@@ -177,7 +173,6 @@ namespace enigmaMachine
                 rotor.BackColor = Color.Salmon;
             else
                 rotor.BackColor = SystemColors.Window;
-            
         }
 
         private void KeyButton_Click(object sender, EventArgs e)
@@ -185,7 +180,10 @@ namespace enigmaMachine
             Button keyButton = ((Button)sender);
             string keyLetter = keyButton.Name.Substring(0, 1);
             keyLetter = plugBoard.GetRewiredLetter(keyLetter);
-            encodeKeyPress(keyLetter);
+            int lampIdx = (char)(scrambleInput(keyLetter)[0]) - 'A';
+            lastLamp.BackColor = Color.Gray;
+            lastLamp = lampLabels[lampIdx];
+            lampLabels[lampIdx].BackColor = Color.Yellow;
         }
 
         private void PlugBoardPin_SelectedValueChanged(object sender, EventArgs e)
@@ -193,7 +191,10 @@ namespace enigmaMachine
             int origin = plugBoardPins.IndexOf((ComboBox)sender);
             int dest = plugBoardPins[origin].SelectedIndex;
 
-            plugBoard.ChangeWiring(IntToLetter(origin), IntToLetter(dest));
+            char originChar = Convert.ToChar(origin + 'A');
+            char destChar = Convert.ToChar(dest + 'A');
+
+            plugBoard.ChangeWiring(originChar.ToString(), destChar.ToString());
             updatePlugBoardGui();
         }
 
@@ -231,7 +232,7 @@ namespace enigmaMachine
                 machine.ChangeRotorPosition(rotor, (int)rotorPositions[rotor].Value);
                 rotorPositions[rotor].BackColor = SystemColors.Window;
             }
-            resetLights();
+            lastLamp.BackColor = Color.Gray;
         }
 
         private void rngSeedUpDown_ValueChanged(object sender, EventArgs e)
@@ -256,7 +257,7 @@ namespace enigmaMachine
 
         private void clearPlugBoardButton_Click(object sender, EventArgs e)
         {
-            plugBoard = new PlugBoard((int)rngSeedUpDown.Value, charMapping); ;
+            plugBoard = new PlugBoard((int)rngSeedUpDown.Value, charMapping);
             updatePlugBoardGui();
         }
 
@@ -267,15 +268,6 @@ namespace enigmaMachine
         }
 
         /* Utility Functions */
-
-        private void encodeKeyPress(string Key)
-        {
-            int lampIdx = 0;
-            resetLights();
-            Key = plugBoard.GetRewiredLetter(Key);
-            lampIdx = LetterToInt(scrambleInput(Key));
-            lampLabels[lampIdx].BackColor = Color.Yellow;
-        }
 
         private string scrambleInput(string Input)
         {
@@ -297,31 +289,14 @@ namespace enigmaMachine
             return swappedInput;
         }
 
-        private int LetterToInt(string Letter)
-        {
-            return (int)((char)Letter[0] - 0x41);
-        }
-
-        private string IntToLetter(int LetterCode)
-        {
-            return ((char)(0x41 + LetterCode)).ToString();
-        }
-
         private void updatePlugBoardGui()
         {
             for(int i = 0; i < plugBoardPins.Count; i++)
             {
-                string letter = ((char)(i + 0x41)).ToString();
-                plugBoardPins[i].SelectedIndex = LetterToInt(plugBoard.GetRewiredLetter(letter));
+                string letter = ((char)(i + 'A')).ToString();
+                plugBoardPins[i].SelectedIndex = (char)plugBoard.GetRewiredLetter(letter)[0] - 'A';
             }
-            resetLights();
+            lastLamp.BackColor = Color.Gray;
         }
-
-        private void resetLights()
-        {
-            foreach(Label lamp in lampLabels)
-                lamp.BackColor = Color.Gray;
-        }
-
     }
 }
